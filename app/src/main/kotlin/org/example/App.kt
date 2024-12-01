@@ -75,6 +75,6 @@ fun day01_part2(): Int {
 
 fun main() {
 
-    println(day01_part1())
-    println(day01_part2())
+    println("Day 1, part 1 solution is '${day01_part1()}'")
+    println("Day 1, part 2 solution is '${day01_part2()}'")
 }
