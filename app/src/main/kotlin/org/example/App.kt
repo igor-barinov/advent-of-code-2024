@@ -5,7 +5,7 @@ package org.example
 
 import kotlin.math.abs
 
-fun day01(): Int? {
+fun day01_part1(): Int {
 
     // Read input
     val lines = read_lines("src/main/resources/day01.txt")
@@ -30,10 +30,51 @@ fun day01(): Int? {
     }
 
     return sum
+}
 
+fun day01_part2(): Int {
+
+    // Read input
+    val lines = read_lines("src/main/resources/day01.txt")
+
+    // Convert lines to pairs of ints
+    val pairs: List<Pair<Int, Int>> = lines.map { line: String ->
+        val parts = line.split("   ")
+        val n1 = parts[0].toInt()
+        val n2 = parts[1].toInt()
+
+        Pair(n1, n2)
+    }
+
+    // Split up pairs into their own lists
+    val listA = pairs.map { pair -> pair.first }
+    val listB = pairs.map { pair -> pair.second }
+
+    // Build frequency map from right list
+    var freqMap = HashMap<Int, Int>()
+    listB.forEach { n -> 
+        if (freqMap.containsKey(n)) {
+            val old = freqMap.getValue(n)
+            freqMap.replace(n, old+1)
+        } else {
+            freqMap.put(n, 1)
+        }
+    }
+
+    // Calculate similarity using frequency map
+    var similarity = 0
+    listA.forEach { n ->
+        if (freqMap.containsKey(n)) {
+            val occurences = freqMap.getValue(n)
+            similarity += n * occurences
+        }
+    }
+
+    return similarity
 }
 
 fun main() {
 
-    println(day01())
+    println(day01_part1())
+    println(day01_part2())
 }
