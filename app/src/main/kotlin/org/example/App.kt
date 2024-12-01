@@ -3,13 +3,37 @@
  */
 package org.example
 
-class App {
-    val greeting: String
-        get() {
-            return "Hello World!"
-        }
+import kotlin.math.abs
+
+fun day01(): Int? {
+
+    // Read input
+    val lines = read_lines("src/main/resources/day01.txt")
+
+    // Convert lines to pairs of ints
+    val pairs: List<Pair<Int, Int>> = lines.map { line: String ->
+        val parts = line.split("   ")
+        val n1 = parts[0].toInt()
+        val n2 = parts[1].toInt()
+
+        Pair(n1, n2)
+    }
+
+    // Split up pairs into their own lists and sort them
+    val listA = pairs.map { pair -> pair.first }.sorted()
+    val listB = pairs.map { pair -> pair.second }.sorted()
+
+    // Get the sum of distances
+    var sum = 0
+    for (i in listA.indices) {
+        sum += abs(listA[i] - listB[i])
+    }
+
+    return sum
+
 }
 
 fun main() {
-    println(App().greeting)
+
+    println(day01())
 }
