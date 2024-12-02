@@ -4,6 +4,7 @@
 package org.example
 
 import kotlin.math.abs
+import org.example.day02_is_safe
 
 fun day01_part1(): Int {
 
@@ -73,8 +74,61 @@ fun day01_part2(): Int {
     return similarity
 }
 
+fun day02_part1(): Int {
+
+    // Read input as list of list of ints
+
+    val lines = read_lines("src/main/resources/day02.txt")
+
+    val reports: List<List<Int>> = lines.map { line: String ->
+        val parts = line.split(" ")
+        parts.map {
+            s: String -> s.toInt()
+        }
+    }
+
+    // Figure out which reports are safe
+    val safeReports = (reports.map {
+        levels: List<Int> -> day02_is_safe(levels)
+    }).filter { isSafe -> isSafe }
+
+
+    return safeReports.size
+
+}
+
+fun day02_part2(): Int {
+
+    // Read input as list of list of ints
+
+    val lines = read_lines("src/main/resources/day02.txt")
+
+    val reports: List<List<Int>> = lines.map { line: String ->
+        val parts = line.split(" ")
+        parts.map {
+            s: String -> s.toInt()
+        }
+    }
+
+    val safeReports = (reports.map { levels: List<Int> -> 
+        // Generate permutations by excluding items
+        val permutations: List<List<Int>> = (0..levels.size).map {
+            i -> levels.filterIndexed { j, _ -> j != i }
+        }
+
+        // Check if one of the permuations are safe
+        permutations.map {
+            perm -> day02_is_safe(perm)
+        }.any { isSafe -> isSafe }
+    }).filter { isSafe -> isSafe }
+
+    return safeReports.size
+
+}
+
 fun main() {
 
-    println("Day 1, part 1 solution is '${day01_part1()}'")
-    println("Day 1, part 2 solution is '${day01_part2()}'")
+    println("day02, part 1 solution is '${day02_part1()}'")
+    println("day02, part 2 solution is '${day02_part2()}'")
+
 }
