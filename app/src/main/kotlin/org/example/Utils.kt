@@ -12,6 +12,13 @@ fun read_lines(filename: String): List<String> {
 
 }
 
+fun read_text(filename: String): String {
+
+    val reader: BufferedReader = File(filename).bufferedReader()
+
+    return reader.readText()
+}
+
 fun day02_is_safe(levels: List<Int>): Boolean {
 
     var isIncreasing: Boolean? = null

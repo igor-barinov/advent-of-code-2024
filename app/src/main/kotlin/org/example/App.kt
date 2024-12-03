@@ -94,7 +94,6 @@ fun day02_part1(): Int {
 
 
     return safeReports.size
-
 }
 
 fun day02_part2(): Int {
@@ -123,12 +122,61 @@ fun day02_part2(): Int {
     }).filter { isSafe -> isSafe }
 
     return safeReports.size
+}
 
+fun day03_part1(): Int {
+
+    val str = read_text("src/main/resources/day03.txt")
+
+    val regex = """mul\(\d+,\d+\)""".toRegex()
+
+    val matches = regex.findAll(str)
+
+    var sum = 0
+    for (match in matches) {
+        val mul = match.value // mul(a,b)
+        val argStr = mul.substring(4, mul.length - 1) // a,b
+        val args = argStr.split(",").map { s: String -> s.toInt() } // [a, b]
+
+        sum += args[0] * args[1]
+    }
+
+    return sum
+}
+
+fun day03_part2(): Int {
+
+    val str = read_text("src/main/resources/day03.txt")
+
+    val regex = """(mul\(\d+,\d+\))|(don't\(\))|(do\(\))""".toRegex()
+
+    val matches = regex.findAll(str)
+
+    var sum = 0
+    var doMul = true
+    for (match in matches) {
+
+        val stmt = match.value
+
+        if (stmt.equals("do()")) { // do()
+            doMul = true
+        } else if (stmt.equals("don't()")) { // don't()
+            doMul = false
+        } else if (doMul) { // mul(a,b)
+            val argStr = stmt.substring(4, stmt.length - 1) // a,b
+            val args = argStr.split(",").map { s: String -> s.toInt() } // [a, b]
+    
+            sum += args[0] * args[1]
+        }
+
+    }
+
+    return sum
 }
 
 fun main() {
 
-    println("day02, part 1 solution is '${day02_part1()}'")
-    println("day02, part 2 solution is '${day02_part2()}'")
+    println("day03, part 1 solution is '${day03_part1()}'")
+    println("day03, part 2 solution is '${day03_part2()}'")
 
 }
