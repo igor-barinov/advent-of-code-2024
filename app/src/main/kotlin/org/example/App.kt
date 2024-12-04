@@ -174,9 +174,34 @@ fun day03_part2(): Int {
     return sum
 }
 
+fun day04_part1(): Int {
+
+    val rows = read_lines("src/main/resources/day04.txt")
+    val cols: List<String> = rows[0].indices.map { y: Int ->
+        rows.indices.map { x -> rows[x][y] }.joinToString("")
+    }
+
+    val LastCol = cols.size-1
+    val LastRow = rows.size-1
+    val seDiags: List<String> = (0..LastCol).map { c: Int -> day04_get_se_diag_from(rows, 0, c) } + (1..LastRow).map { r: Int -> day04_get_se_diag_from(rows, r, 0) }
+    val swDiags: List<String> = (LastCol.downTo(0)).map { c: Int -> day04_get_sw_diag_from(rows, 0, c) } + (LastRow.downTo(1)).map { r: Int -> day04_get_sw_diag_from(rows, r, LastCol) }
+
+    val rgx = """(XMASAMX)|(XMAS)|(SAMX)""".toRegex()
+    val horizCounts = rows.map { str: String -> day04_count_matches(rgx.findAll(str)) }.reduce { sum, n -> sum + n }
+    val vertCounts = cols.map { str: String -> day04_count_matches(rgx.findAll(str)) }.reduce { sum, n -> sum + n }
+    val seDiagCounts = seDiags.map { str: String -> day04_count_matches(rgx.findAll(str)) }.reduce { sum, n -> sum + n }
+    val swDiagCounts = swDiags.map { str: String -> day04_count_matches(rgx.findAll(str)) }.reduce { sum, n -> sum + n }
+
+    return horizCounts + vertCounts + seDiagCounts + swDiagCounts
+}
+
+fun day04_part2(): Int {
+    return 0
+}
+
 fun main() {
 
-    println("day03, part 1 solution is '${day03_part1()}'")
-    println("day03, part 2 solution is '${day03_part2()}'")
+    println("day04, part 1 solution is '${day04_part1()}'")
+    println("day04, part 2 solution is '${day04_part2()}'")
 
 }

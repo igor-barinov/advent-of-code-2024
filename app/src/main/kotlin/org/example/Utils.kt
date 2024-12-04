@@ -56,5 +56,42 @@ fun day02_is_safe(levels: List<Int>): Boolean {
     }
 
     return true
+}
 
+fun day04_get_se_diag_from(lines: List<String>, x: Int, y: Int): String {
+    var r = x
+    var c = y
+    
+    var str = ""
+    while (r < lines.size && c < lines[r].length) {
+        str += lines[r][c]
+        r += 1
+        c += 1
+    }
+
+    return str
+}
+
+fun day04_get_sw_diag_from(lines: List<String>, x: Int, y: Int): String {
+    var r = x
+    var c = y
+    
+    var str = ""
+    while (r < lines.size && c >= 0) {
+        str += lines[r][c]
+        r += 1
+        c -= 1
+    }
+
+    return str
+}
+
+fun day04_count_matches(matches: Sequence<MatchResult>): Int {
+    var n = 0
+    for (m in matches) {
+        if (m.value.equals("XMASAMX")) { n += 2 }
+        else { n += 1 }
+    }
+
+    return n
 }
