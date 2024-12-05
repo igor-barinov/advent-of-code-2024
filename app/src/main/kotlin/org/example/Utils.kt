@@ -116,6 +116,9 @@ fun day05_verify_update(update: List<Int>, orderingMap: HashMap<Int, HashSet<Int
 fun day05_correct_update(update: List<Int>, orderingMap: HashMap<Int, HashSet<Int>>): Int {
     val sets = update.map { orderingMap.getValue(it) }
 
+    // Score each number by the number of times it appears in a set for a different number
+    // A higer score means it will appear later
+
     val positionScores = update.map { n: Int ->
         val score = sets.map { if (it.contains(n)) { 1 } else { 0 } }.reduce { sum, x -> sum + x }
         Pair(n, score)
