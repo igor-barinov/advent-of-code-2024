@@ -186,7 +186,7 @@ fun day04_part1(): Int {
     val seDiags: List<String> = (0..LastCol).map { c: Int -> day04_get_se_diag_from(rows, 0, c) } + (1..LastRow).map { r: Int -> day04_get_se_diag_from(rows, r, 0) }
     val swDiags: List<String> = (LastCol.downTo(0)).map { c: Int -> day04_get_sw_diag_from(rows, 0, c) } + (LastRow.downTo(1)).map { r: Int -> day04_get_sw_diag_from(rows, r, LastCol) }
 
-    val rgx = """(XMASAMX)|(XMAS)|(SAMX)""".toRegex()
+    val rgx = """(XMASAMX)|(SAMXMAS)|(XMAS)|(SAMX)""".toRegex()
     val horizCounts = rows.map { str: String -> day04_count_matches(rgx.findAll(str)) }.reduce { sum, n -> sum + n }
     val vertCounts = cols.map { str: String -> day04_count_matches(rgx.findAll(str)) }.reduce { sum, n -> sum + n }
     val seDiagCounts = seDiags.map { str: String -> day04_count_matches(rgx.findAll(str)) }.reduce { sum, n -> sum + n }
@@ -199,9 +199,85 @@ fun day04_part2(): Int {
     return 0
 }
 
+fun day05_part1(): Int {
+
+    // Split up input into the 2 sections
+    val lines = read_lines("src/main/resources/day05.txt")
+    val i = lines.indexOfFirst { it.equals("") }
+    val section1 = lines.subList(0, i)
+    val section2 = lines.subList(i+1, lines.size)
+
+
+    // Build ordering map from section 1
+    // [ number ] -> set of numbers that must follow
+    val orderingMap: HashMap<Int, HashSet<Int>> = hashMapOf()
+
+    section1.forEach { str: String ->
+        val nums = str.split("|").map { it.toInt() }
+
+        val k = nums[0]
+
+        if (orderingMap.contains(k)) {
+            val set = orderingMap.getValue(k)
+            set.add(nums[1])
+            orderingMap.replace(k, set)
+        } else {
+            orderingMap.put(k, hashSetOf(nums[1]))
+        }
+    }
+
+    // Parse section 2 into list of int arrays
+    val updates = section2.map { line: String -> line.split(",").map { it.toInt() } }
+
+    // Sum the middle numbers
+    val result = updates.map { day05_verify_update(it, orderingMap) }.reduce { sum, n -> sum + n }
+
+    return result
+
+}
+
+fun day05_part2(): Int {
+    // Split up input into the 2 sections
+    val lines = read_lines("src/main/resources/day05.txt")
+    val i = lines.indexOfFirst { it.equals("") }
+    val section1 = lines.subList(0, i)
+    val section2 = lines.subList(i+1, lines.size)
+
+
+    // Build ordering map from section 1
+    // [ number ] -> set of numbers that must follow
+    val orderingMap: HashMap<Int, HashSet<Int>> = hashMapOf()
+
+    section1.forEach { str: String ->
+        val nums = str.split("|").map { it.toInt() }
+
+        val k = nums[0]
+
+        if (orderingMap.contains(k)) {
+            val set = orderingMap.getValue(k)
+            set.add(nums[1])
+            orderingMap.replace(k, set)
+        } else {
+            orderingMap.put(k, hashSetOf(nums[1]))
+        }
+    }
+
+    // Parse section 2 into list of int arrays
+    val updates = section2.map { line: String -> line.split(",").map { it.toInt() } }
+
+    // Find the incorrect updates and get the corrected middle numbers
+    val result = updates.map { update: List<Int> ->
+        if (day05_verify_update(update, orderingMap) == 0) {
+            day05_correct_update(update, orderingMap)
+        } else { 0 }
+    }.reduce { sum, n -> sum + n }
+
+    return result
+}
+
 fun main() {
 
-    println("day04, part 1 solution is '${day04_part1()}'")
-    println("day04, part 2 solution is '${day04_part2()}'")
+    println("day05, part 1 solution is '${day05_part1()}'")
+    println("day05, part 2 solution is '${day05_part2()}'")
 
 }

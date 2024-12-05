@@ -89,9 +89,41 @@ fun day04_get_sw_diag_from(lines: List<String>, x: Int, y: Int): String {
 fun day04_count_matches(matches: Sequence<MatchResult>): Int {
     var n = 0
     for (m in matches) {
-        if (m.value.equals("XMASAMX")) { n += 2 }
+        if (m.value.equals("XMASAMX") || m.value.equals("SAMXMAS")) { n += 2 }
         else { n += 1 }
     }
 
     return n
+}
+
+fun day05_verify_update(update: List<Int>, orderingMap: HashMap<Int, HashSet<Int>>): Int {
+
+    for (i in (update.size-1).downTo(0)) {
+        val k = update[i]
+
+        val succeedingNums = orderingMap.getValue(k)
+
+        if (update.subList(0, i).any { succeedingNums.contains(it) }) { // Check if preceding numbers are allowed to precede
+            return 0 // If not return 0
+        }
+
+    }
+
+    val middleIndex = update.size / 2
+    return update[middleIndex] // Otherwise return middle number
+}
+
+fun day05_correct_update(update: List<Int>, orderingMap: HashMap<Int, HashSet<Int>>): Int {
+    val sets = update.map { orderingMap.getValue(it) }
+
+    val positionScores = update.map { n: Int ->
+        val score = sets.map { if (it.contains(n)) { 1 } else { 0 } }.reduce { sum, x -> sum + x }
+        Pair(n, score)
+    }
+
+    val sortedPairs = positionScores.sortedBy { it.second }
+
+    val middleIndex = update.size / 2
+    return sortedPairs[middleIndex].first
+
 }
