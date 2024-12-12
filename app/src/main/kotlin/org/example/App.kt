@@ -5,7 +5,7 @@ package org.example
 
 fun main() {
 
-    println("day06, part 1 solution is '${Day06.part1()}'")
-    println("day06, part 2 solution is '${Day06.part2()}'")
+    println("day07, part 1 solution is '${Day07.part1()}'")
+    println("day07, part 2 solution is '${Day07.part2()}'")
 
 }
